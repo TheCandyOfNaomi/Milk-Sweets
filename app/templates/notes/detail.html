@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3>{{ note.title }}</h3>
+        <a href="{{ url_for('notes.edit_note', id=note.id) }}" class="btn btn-sm btn-outline-primary">编辑</a>
+    </div>
+    <div class="card-body">
+        <p class="card-text">{{ note.content|safe }}</p>
+        <p class="text-muted">
+            标签：
+            {% for tag in note.tags %}
+                <span class="badge badge-info">{{ tag.name }}</span>
+            {% endfor %}
+        </p>
+        <p class="text-muted">创建于 {{ note.created_at.strftime('%Y-%m-%d %H:%M') }}，最后更新 {{ note.updated_at.strftime('%Y-%m-%d %H:%M') }}</p>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h4>AI 助手</h4>
+    <button id="summarize-btn" class="btn btn-sm btn-primary">生成摘要</button>
+    <div id="summary-result" class="mt-2" style="display:none;">
+        <div class="alert alert-info" id="summary-text"></div>
+    </div>
+
+    <hr>
+    <div class="form-group">
+        <label for="question">提问关于这篇笔记：</label>
+        <input type="text" id="question" class="form-control" placeholder="输入问题...">
+        <button id="ask-btn" class="btn btn-sm btn-success mt-2">提问</button>
+        <div id="answer-result" class="mt-2" style="display:none;">
+            <div class="alert alert-secondary" id="answer-text"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.getElementById('summarize-btn').addEventListener('click', function() {
+    const btn = this;
+    btn.disabled = true;
+    btn.innerText = '生成中...';
+    fetch('{{ url_for("notes.summarize_async", id=note.id) }}', {method: 'POST'})
+        .then(res => res.json())
+        .then(data => {
+            if (data.task_id) pollTask(data.task_id, 'summary');
+            else alert('提交失败');
+        });
+});
+
+document.getElementById('ask-btn').addEventListener('click', function() {
+    const question = document.getElementById('question').value;
+    if (!question) return;
+    fetch('{{ url_for("notes.ask_async", id=note.id) }}', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({question: question})
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.task_id) pollTask(data.task_id, 'answer');
+        else alert('提交失败');
+    });
+});
+
+function pollTask(taskId, type) {
+    const interval = setInterval(() => {
+        fetch(`/notes/task/${taskId}/status`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.state === 'SUCCESS') {
+                    clearInterval(interval);
+                    if (type === 'summary') {
+                        document.getElementById('summary-result').style.display = 'block';
+                        document.getElementById('summary-text').innerText = data.result.summary;
+                        document.getElementById('summarize-btn').disabled = false;
+                        document.getElementById('summarize-btn').innerText = '生成摘要';
+                    } else if (type === 'answer') {
+                        document.getElementById('answer-result').style.display = 'block';
+                        document.getElementById('answer-text').innerText = data.result.answer;
+                    }
+                } else if (data.state === 'FAILURE') {
+                    clearInterval(interval);
+                    alert('任务失败：' + (data.error || '未知错误'));
+                    if (type === 'summary') {
+                        document.getElementById('summarize-btn').disabled = false;
+                        document.getElementById('summarize-btn').innerText = '生成摘要';
+                    }
+                }
+            });
+    }, 2000);
+}
+</script>
+{% endblock %}

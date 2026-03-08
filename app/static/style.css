@@ -1,0 +1,328 @@
+/* ===== PKMS 自定义样式 ===== */
+/* 基于 Bootstrap 4 的美化与扩展 */
+
+/* ---------- 全局设置 ---------- */
+body {
+    background-color: #f8f9fc;  /* 柔和的蓝灰色背景 */
+    font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', sans-serif;
+    color: #2c3e50;
+}
+
+/* 容器内卡片间距 */
+.container {
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+/* ---------- 导航栏 ---------- */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 0.8rem 1rem;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 1.4rem;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.2s;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
+}
+
+/* 搜索框美化 */
+.navbar .form-control {
+    border-radius: 20px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: background-color 0.3s, width 0.3s;
+}
+
+.navbar .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.navbar .form-control:focus {
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: none;
+    outline: none;
+    width: 250px;  /* 稍微加宽 */
+}
+
+.navbar .btn-outline-light {
+    border-radius: 20px;
+    border-width: 1px;
+}
+
+/* ---------- 卡片美化 ---------- */
+.card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* ---------- 列表组（笔记列表） ---------- */
+.list-group-item {
+    border: none;
+    border-radius: 12px !important;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    transition: background-color 0.2s, box-shadow 0.2s;
+    background-color: #ffffff;
+}
+
+.list-group-item:hover {
+    background-color: #f0f4ff;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
+}
+
+.list-group-item-action {
+    color: #2c3e50;
+}
+
+.list-group-item-action .badge {
+    margin-right: 0.3rem;
+}
+
+/* 笔记标题 */
+.list-group-item h5 {
+    font-weight: 600;
+    color: #1a2b3c;
+}
+
+/* 时间文字 */
+.list-group-item small {
+    color: #6c757d;
+}
+
+/* ---------- 标签（badge）美化 ---------- */
+.badge {
+    font-weight: 500;
+    padding: 0.4em 0.8em;
+    border-radius: 30px;
+    letter-spacing: 0.3px;
+}
+
+.badge-info {
+    background-color: #e3f2fd;
+    color: #0d6efd;
+}
+
+.badge-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.badge-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* 热门标签的放大效果 */
+.badge-info.p-2 {
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+}
+
+.badge-info.p-2:hover {
+    transform: scale(1.05);
+    cursor: default;
+}
+
+/* ---------- 按钮样式 ---------- */
+.btn {
+    border-radius: 30px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46a0 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-outline-primary {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: transparent;
+}
+
+.btn-outline-secondary {
+    border-color: #cbd5e0;
+    color: #4a5568;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #edf2f7;
+    border-color: #a0aec0;
+    color: #2d3748;
+}
+
+/* AI 特殊按钮 */
+.btn-ai {
+    background-color: #f0f4ff;
+    border: 1px solid #c3dafe;
+    color: #4c51bf;
+    border-radius: 30px;
+    padding: 0.4rem 1.2rem;
+    font-size: 0.9rem;
+}
+
+.btn-ai:hover {
+    background-color: #e0e7ff;
+    border-color: #667eea;
+}
+
+/* ---------- 表单元素 ---------- */
+.form-control {
+    border-radius: 30px;
+    border: 1px solid #e2e8f0;
+    padding: 0.6rem 1.2rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+textarea.form-control {
+    border-radius: 20px;
+}
+
+/* ---------- 警告框 ---------- */
+.alert {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+.alert-info {
+    background-color: #e3f2fd;
+    color: #0d6efd;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+/* ---------- 分页 ---------- */
+.pagination .page-link {
+    border: none;
+    border-radius: 50%;
+    margin: 0 0.2rem;
+    color: #4a5568;
+    transition: all 0.2s;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination .page-link:hover {
+    background-color: #e2e8f0;
+    color: #2d3748;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* ---------- 统计卡片中的数字 ---------- */
+.card .display-4 {
+    font-weight: 700;
+    color: #1a202c;
+    font-size: 2.5rem;
+}
+
+/* ---------- 笔记详情页 ---------- */
+.card-header h3 {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.card-text {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    color: #334155;
+}
+
+/* ---------- 智能推荐按钮的加载状态 ---------- */
+#recommend-tags-btn:disabled,
+#summarize-btn:disabled,
+#ask-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ---------- 小工具 ---------- */
+/* 漂亮的阴影 */
+.shadow-soft {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+}
+
+/* 圆角图片 */
+img.rounded-circle {
+    border: 3px solid white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- 响应式微调 ---------- */
+@media (max-width: 768px) {
+    .navbar .form-control:focus {
+        width: 180px;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+}

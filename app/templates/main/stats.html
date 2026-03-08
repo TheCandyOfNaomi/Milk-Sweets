@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>您的知识库统计</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">笔记总数</h5>
+                    <p class="card-text display-4">{{ note_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">标签总数</h5>
+                    <p class="card-text display-4">{{ tag_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">本周新增</h5>
+                    <p class="card-text display-4">{{ notes_this_week }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">总字数</h5>
+                    <p class="card-text display-4">{{ total_words }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">笔记创建时间分布</div>
+                <div class="card-body">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">热门标签 (Top 10)</div>
+                <div class="card-body">
+                    <canvas id="tagChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">最近7天更新</div>
+                <div class="card-body">
+                    <canvas id="weeklyChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    最长笔记
+                    <span class="badge badge-primary badge-pill">
+                        {% if longest_note %}{{ longest_note.title }} ({{ longest_note.content|length }} 字符){% else %}无{% endif %}
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    最短笔记
+                    <span class="badge badge-primary badge-pill">
+                        {% if shortest_note %}{{ shortest_note.title }} ({{ shortest_note.content|length }} 字符){% else %}无{% endif %}
+                    </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    平均长度
+                    <span class="badge badge-primary badge-pill">{{ avg_length }} 字符</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('monthlyChart'), {
+    type: 'bar',
+    data: {
+        labels: {{ months|tojson }},
+        datasets: [{
+            label: '笔记数量',
+            data: {{ counts|tojson }},
+            backgroundColor: 'rgba(54, 162, 235, 0.5)'
+        }]
+    },
+    options: { responsive: true }
+});
+
+new Chart(document.getElementById('tagChart'), {
+    type: 'bar',  
+    data: {
+        labels: {{ tag_freq|map(attribute=0)|list|tojson }},
+        datasets: [{
+            label: '使用次数',
+            data: {{ tag_freq|map(attribute=1)|list|tojson }},
+            backgroundColor: 'rgba(255, 99, 132, 0.5)'
+        }]
+    },
+    options: {
+        indexAxis: 'y',  // 关键：设置 y 轴为类别轴，实现水平条形图
+        responsive: true
+    }
+});
+
+new Chart(document.getElementById('weeklyChart'), {
+    type: 'line',
+    data: {
+        labels: {{ last_7_days|map(attribute='date')|list|tojson }},
+        datasets: [{
+            label: '更新次数',
+            data: {{ last_7_days|map(attribute='count')|list|tojson }},
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)'
+        }]
+    },
+    options: { responsive: true }
+});
+</script>
+{% endblock %}
